@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our 1st Anniversary ❤️</title>
+<style>
+body {margin:0;font-family:Arial;background:#111;overflow:hidden;}
+.chat {max-width:400px;margin:auto;height:100vh;background:#000;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;}
+.bubble {padding:10px 15px;margin:5px;border-radius:20px;max-width:70%;animation:fadeIn .5s;}
+.left {background:#333;color:#fff;align-self:flex-start;}
+.right {background:#0084ff;color:#fff;align-self:flex-end;}
+@keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.btn {margin:5px;padding:10px;border-radius:20px;border:none;cursor:pointer;}
+#controls{text-align:center;}
+.heart{position:fixed;bottom:0;font-size:20px;animation:float 5s linear infinite;}
+@keyframes float{to{transform:translateY(-100vh);opacity:0;}}
+</style>
+</head>
+<body>
+
+<div class="chat" id="chat"></div>
+<div id="controls"></div>
+
+<script>
+const chat=document.getElementById("chat");
+const controls=document.getElementById("controls");
+
+function addMsg(text,side="left"){
+ let div=document.createElement("div");
+ div.className="bubble "+side;
+ div.innerText=text;
+ chat.appendChild(div);
+ chat.scrollTop=chat.scrollHeight;
+}
+
+function addButtons(){
+ controls.innerHTML='<button class="btn" id="yes">YES 💕</button><button class="btn" id="maybe">MAYBE 🤔</button>';
+ document.getElementById("yes").onclick=yesLogic;
+ document.getElementById("maybe").onclick=maybeLogic;
+}
+
+let yesCount=0,final=false;
+
+function yesLogic(){
+ yesCount++;
+ if(yesCount<10){addMsg("Are you sure? 😏 ("+yesCount+")");}
+ else if(yesCount===10){addMsg("Still yes?? 😳");}
+ else if(yesCount===11){addMsg("Are you REALLY sure? 😳");final=true;}
+ else if(final){controls.innerHTML="";startCountdown();}
+}
+
+function maybeLogic(){
+ controls.innerHTML='<input id="reason" placeholder="why maybe?"><button onclick="check()">send</button>';
+}
+
+function check(){
+ let val=document.getElementById("reason").value.toLowerCase();
+ if(val.length<=5||val.includes("jk")||val.includes("joke")){
+  addMsg("okay 😌 now press YES");
+  addButtons();
+ } else {
+  addMsg("wrong answer 😤");
+ }
+}
+
+function startCountdown(){
+ let end=new Date("2026-04-25").getTime();
+ let i=setInterval(()=>{
+  let now=new Date().getTime();
+  let d=end-now;
+  let days=Math.floor(d/(1000*60*60*24));
+  let h=Math.floor((d/(1000*60*60))%24);
+  let m=Math.floor((d/(1000*60))%60);
+  let s=Math.floor((d/1000)%60);
+  document.title=`${days}d ${h}h ${m}m ${s}s ❤️`;
+  if(d<0){clearInterval(i);addMsg("Happy Anniversary ❤️","right");}
+ },1000);
+}
+
+setInterval(()=>{
+ let heart=document.createElement("div");
+ heart.className="heart";
+ heart.style.left=Math.random()*100+"%";
+ heart.innerText="💖";
+ document.body.appendChild(heart);
+ setTimeout(()=>heart.remove(),5000);
+},500);
+
+addMsg("hey... ❤️");
+setTimeout(()=>addMsg("happy anniversary 🥺"),1000);
+setTimeout(()=>addMsg("will you go out with me again? 💖"),2000);
+setTimeout(addButtons,2500);
+</script>
+
+</body>
+</html>
